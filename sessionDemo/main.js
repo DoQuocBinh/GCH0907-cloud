@@ -23,8 +23,8 @@ app.get('/',(req,res)=>{
     let accessCount = req.session.accessCount || 0
     accessCount++
     req.session.accessCount = accessCount
-
-    res.render('home',{'accessCount':accessCount})
+    let chuaDangNhap = !req.session.userName
+    res.render('home',{'accessCount':accessCount,'chuaDangNhap':chuaDangNhap})
 })
 
 const PORT = process.env.PORT || 5000

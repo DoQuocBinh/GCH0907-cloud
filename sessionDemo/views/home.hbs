@@ -9,10 +9,12 @@
 <body>
     <h1>Say Hi!</h1>
     <h1>Ban da truy cap trang {{accessCount}} lan trong phien lam viec!</h1>
-    <form action="/register" method="post">
-        Tell me your name : <input type="text" name="txtName">
-        <input type="submit" value="Ok, I agreed!">
-    </form>
+    {{#if chuaDangNhap}}
+        <form action="/register" method="post">
+            Tell me your name : <input type="text" name="txtName">
+            <input type="submit" value="Ok, I agreed!">
+        </form>
+    {{/if}}
     <p>
         <a href="/profile">See my profile!</a>
     </p>

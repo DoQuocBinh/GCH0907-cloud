@@ -47,8 +47,12 @@ app.post('/register',async (req,res)=>{
     }    
 })
 
-app.get('/profile',isAuthenticated, (req,res)=>{
-    res.render('profile',{'name': req.session.userName,'sId':req.session.id})
+app.get('/profile',isAuthenticated, async (req,res)=>{
+    let server = await MongoClient.connect(url)
+    let dbo = server.db("ATNToys")
+    let user = 
+        await dbo.collection("users").find({$and :[{'name':req.session.userName}]}).limit(1).toArray()
+    res.render('profile',{'name': req.session.userName,'sId':req.session.id,'user':user[0]})
 })
 
 app.get('/',(req,res)=>{

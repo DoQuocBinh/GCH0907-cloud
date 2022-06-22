@@ -14,6 +14,14 @@ app.use(session({
     resave: false
 }))
 
+function isAuthenticated(req,res,next){
+    let chuaDangNhap = !req.session.userName
+    if(chuaDangNhap)
+        res.redirect('/')
+    else
+        next()
+}
+
 app.post('/register',async (req,res)=>{
     let name = req.body.txtName
     req.session.userName = name
@@ -30,7 +38,7 @@ app.post('/register',async (req,res)=>{
     
 })
 
-app.get('/profile',(req,res)=>{
+app.get('/profile',isAuthenticated, (req,res)=>{
     res.render('profile',{'name': req.session.userName})
 })
 

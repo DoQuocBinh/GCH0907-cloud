@@ -14,6 +14,15 @@ app.use(session({
     resave: false
 }))
 
+app.get('/logout',(req,res)=>{
+    req.session.userName = null
+    req.session.save((err)=>{
+        req.session.regenerate((err2)=>{
+            res.redirect('/')
+        })
+    })
+})
+
 function isAuthenticated(req,res,next){
     let chuaDangNhap = !req.session.userName
     if(chuaDangNhap)
@@ -30,16 +39,16 @@ app.post('/register',async (req,res)=>{
     let dbo = server.db("ATNToys")
     let result = await dbo.collection("users").find({$and :[{'name':name}]}).toArray()
     if(result.length >0){
-        res.render('profile',{'name': req.session.userName})
+        //res.render('profile',{'name': req.session.userName})
+        res.redirect('/profile')
     }else{
         res.write('khong hop le')
         res.end()
-    }
-    
+    }    
 })
 
 app.get('/profile',isAuthenticated, (req,res)=>{
-    res.render('profile',{'name': req.session.userName})
+    res.render('profile',{'name': req.session.userName,'sId':req.session.id})
 })
 
 app.get('/',(req,res)=>{

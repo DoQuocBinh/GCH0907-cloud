@@ -14,6 +14,30 @@ app.use(session({
     resave: false
 }))
 
+app.post('/search',async (req,res)=>{
+    let name = req.body.txtSearch
+    let server = await MongoClient.connect(url)
+    let dbo = server.db("ATNToys")
+    let result = await dbo.collection("student").find({'name':name}).toArray()
+    if(result == 0){
+        res.write('Khong co ket qua')
+        res.end()
+    }else{
+        let firstStudent = result[0]
+        res.write("Ok tim thay")
+        console.log(firstStudent._id)
+        let result2 = 
+        await dbo.collection("grade").find({'studentId':firstStudent._id}).
+                        toArray()
+        console.log(result2[0].Mark)
+        res.end()
+    }
+})
+
+app.get('/searchMark', (req,res)=>{
+    res.render('search')
+})
+
 app.get('/logout',(req,res)=>{
     req.session.userName = null
     req.session.save((err)=>{
